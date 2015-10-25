@@ -3,7 +3,7 @@
     angular.module('FileManagerApp').provider('fileManagerConfig', function() {
 
         var values = {
-            appName: 'https://github.com/joni2back/angular-filemanager',
+            appName: 'NavetFileApp',
             defaultLang: 'en',
 
             listUrl: 'bridges/php/handler.php',
