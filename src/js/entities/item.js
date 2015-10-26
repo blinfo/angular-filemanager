@@ -1,7 +1,7 @@
 (function (window, angular, $) {
     'use strict';
     angular.module('FileManagerApp').factory('item', ['$http', '$q', '$translate', 'fileManagerConfig', 'chmod', function ($http, $q, $translate, fileManagerConfig, Chmod) {
-
+            
             var Item = function (model, path) {
                 var rawModel = {
                     name: model && model.name || '',
@@ -9,6 +9,7 @@
                     type: model && model.isFolder ? 'dir' : 'file',
                     sizeInBytes: model && parseInt(model.sizeInBytes || 0),
                     lastModified: parseMySQLDate(model && model.lastModified),
+                    mediaType: model && model.mediaType,
                     perms: new Chmod(model && model.rights),
                     content: model && model.content || '',
                     recursive: false,
@@ -19,27 +20,27 @@
                         return ('/' + this.path.join('/') + '/' + this.name).replace(/\/\//, '/');
                     }
                 };
-
+                
                 this.error = '';
                 this.inprocess = false;
-
+                
                 this.model = angular.copy(rawModel);
                 this.tempModel = angular.copy(rawModel);
-
+                
                 function parseMySQLDate(mysqlDate) {
                     return new Date(mysqlDate);
                 }
             };
-
+            
             Item.prototype.update = function () {
                 angular.extend(this.model, angular.copy(this.tempModel));
             };
-
+            
             Item.prototype.revert = function () {
                 angular.extend(this.tempModel, angular.copy(this.model));
                 this.error = '';
             };
-
+            
             Item.prototype.deferredHandler = function (data, deferred, defaultMsg) {
                 if (!data || typeof data !== 'object') {
                     this.error = 'Bridge response error, please check the docs';
@@ -59,7 +60,7 @@
                 this.update();
                 return deferred.resolve(data);
             };
-
+            
             Item.prototype.createFolder = function () {
                 var self = this;
                 var deferred = $q.defer();
@@ -88,7 +89,7 @@
 //                        folderName: self.tempModel.name
 //                    }
 //                };
-
+                
                 self.inprocess = true;
                 self.error = '';
                 $http(req).success(function (data) {
@@ -98,10 +99,10 @@
                 })['finally'](function () {
                     self.inprocess = false;
                 });
-
+                
                 return deferred.promise;
             };
-
+            
             Item.prototype.rename = function () {
                 var self = this;
                 var deferred = $q.defer();
@@ -142,7 +143,7 @@
                 });
                 return deferred.promise;
             };
-
+            
             Item.prototype.copy = function () {
                 var self = this;
                 var deferred = $q.defer();
@@ -151,7 +152,7 @@
                         path: self.model.fullPath(),
                         newPath: self.tempModel.fullPath()
                     }};
-
+                
                 self.inprocess = true;
                 self.error = '';
                 $http.post(fileManagerConfig.copyUrl, data).success(function (data) {
@@ -163,7 +164,7 @@
                 });
                 return deferred.promise;
             };
-
+            
             Item.prototype.compress = function () {
                 var self = this;
                 var deferred = $q.defer();
@@ -172,7 +173,7 @@
                         path: self.model.fullPath(),
                         destination: self.tempModel.fullPath()
                     }};
-
+                
                 self.inprocess = true;
                 self.error = '';
                 $http.post(fileManagerConfig.compressUrl, data).success(function (data) {
@@ -184,7 +185,7 @@
                 });
                 return deferred.promise;
             };
-
+            
             Item.prototype.extract = function () {
                 var self = this;
                 var deferred = $q.defer();
@@ -194,7 +195,7 @@
                         sourceFile: self.model.fullPath(),
                         destination: self.tempModel.fullPath()
                     }};
-
+                
                 self.inprocess = true;
                 self.error = '';
                 $http.post(fileManagerConfig.extractUrl, data).success(function (data) {
@@ -206,7 +207,7 @@
                 });
                 return deferred.promise;
             };
-
+            
             Item.prototype.getUrl = function (preview) {
                 var path = this.model.fullPath();
                 var data = {
@@ -216,18 +217,23 @@
                 };
                 return path && [fileManagerConfig.baseUrl, $.param(data)].join('?');
             };
-
+            
             Item.prototype.download = function (preview) {
                 var self = this;
                 if (this.model.type !== 'dir') {
                     this.getContent().then(function () {
-                        console.log(self.model.content);
-                        window.open(self.model.content, '_blank', '');
+                        var fileName = self.model.name;
+                        var content = self.model.contectArrayBuffer;
+                        var mediaType = self.model.mediaType + ";charset=utf-8;";
+                        var blob = new Blob([content], {type: mediaType});
+                        var downloadLink = angular.element('<a></a>');
+                        downloadLink.attr('href', window.URL.createObjectURL(blob));
+                        downloadLink.attr('download', fileName);
+                        downloadLink[0].click();
                     });
-//                    window.open(this.getUrl(preview), '_blank', '');
                 }
             };
-
+            
             Item.prototype.getContent = function () {
                 var self = this;
                 var deferred = $q.defer();
@@ -236,11 +242,12 @@
 //                        mode: 'editfile',
 //                        path: self.tempModel.fullPath()
 //                    }};
-
+                
                 self.inprocess = true;
                 self.error = '';
-                $http.get(fileManagerConfig.baseUrl + path).success(function (data) {
+                $http.get(fileManagerConfig.baseUrl + path, {responseType: "arraybuffer"}).success(function (data) {
                     self.tempModel.content = self.model.content = data;
+                    self.model.contectArrayBuffer = data;
                     self.deferredHandler({}, deferred);
                 }).error(function (data) {
                     self.deferredHandler(data, deferred, $translate.instant('error_getting_content'));
@@ -249,12 +256,12 @@
                 });
                 return deferred.promise;
             };
-
+            
             Item.prototype.remove = function () {
                 var self = this;
                 var deferred = $q.defer();
 //                var path = self.tempModel.path.join('/');
-
+                
                 var path = self.tempModel.fullPath();
                 if (self.isFolder()) {
                     path += '/';
@@ -267,7 +274,7 @@
 //                        mode: 'delete',
 //                        path: self.tempModel.fullPath()
 //                    }};
-
+                
                 self.inprocess = true;
                 self.error = '';
                 $http(req).success(function (data) {
@@ -279,7 +286,7 @@
                 });
                 return deferred.promise;
             };
-
+            
             Item.prototype.edit = function () {
                 var self = this;
                 var deferred = $q.defer();
@@ -288,10 +295,10 @@
                         content: self.tempModel.content,
                         path: self.tempModel.fullPath()
                     }};
-
+                
                 self.inprocess = true;
                 self.error = '';
-
+                
                 $http.post(fileManagerConfig.editUrl, data).success(function (data) {
                     self.deferredHandler(data, deferred);
                 }).error(function (data) {
@@ -301,7 +308,7 @@
                 });
                 return deferred.promise;
             };
-
+            
             Item.prototype.changePermissions = function () {
                 var self = this;
                 var deferred = $q.defer();
@@ -312,7 +319,7 @@
                         permsCode: self.tempModel.perms.toCode(),
                         recursive: self.tempModel.recursive
                     }};
-
+                
                 self.inprocess = true;
                 self.error = '';
                 $http.post(fileManagerConfig.permissionsUrl, data).success(function (data) {
@@ -324,27 +331,27 @@
                 });
                 return deferred.promise;
             };
-
+            
             Item.prototype.isFolder = function () {
                 return this.model.type === 'dir';
             };
-
+            
             Item.prototype.isEditable = function () {
                 return !this.isFolder() && fileManagerConfig.isEditableFilePattern.test(this.model.name);
             };
-
+            
             Item.prototype.isImage = function () {
                 return fileManagerConfig.isImageFilePattern.test(this.model.name);
             };
-
+            
             Item.prototype.isCompressible = function () {
                 return this.isFolder();
             };
-
+            
             Item.prototype.isExtractable = function () {
                 return !this.isFolder() && fileManagerConfig.isExtractableFilePattern.test(this.model.name);
             };
-
+            
             return Item;
         }]);
 })(window, angular, jQuery);
