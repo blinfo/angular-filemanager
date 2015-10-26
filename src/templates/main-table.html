@@ -19,12 +19,12 @@
                     <span class="sortorder" ng-show="predicate[1] === 'model.date'" ng-class="{reverse:reverse}"></span>
                 </a>
             </th>
-            <th class="hidden-sm hidden-xs">
+<!--            <th class="hidden-sm hidden-xs">
                 <a href="" ng-click="order('model.permissions')">
                     {{"permissions" | translate}}
                     <span class="sortorder" ng-show="predicate[1] === 'model.permissions'" ng-class="{reverse:reverse}"></span>
                 </a>
-            </th>
+            </th>-->
             <th class="text-right"></th>
         </tr>
     </thead>
@@ -56,11 +56,11 @@
                 {{item.model.sizeKb()}}kb
             </td>
             <td class="hidden-sm hidden-xs">
-                {{item.model.date | formatDate }}
+                {{item.model.lastModified | formatDate }}
             </td>
-            <td class="hidden-sm hidden-xs">
+<!--            <td class="hidden-sm hidden-xs">
                 {{item.model.perms.toCode(item.model.type === 'dir'?'d':'-')}}
-            </td>
+            </td>-->
             <td class="text-right">
                 <div ng-include="config.tplPath + '/item-toolbar.html'"></div>
             </td>

@@ -30,17 +30,17 @@
 
             for (var i = 0; i < fileList.length; i++) {
                 var fileObj = fileList.item(i);
-                fileObj instanceof window.File && form.append('file-' + i, fileObj);
+                fileObj instanceof window.File && form.append('file', fileObj);
             }
 
             self.requesting = true;
-            $http.post(fileManagerConfig.uploadUrl, form, {
+            $http.post(fileManagerConfig.baseUrl, form, {
                 transformRequest: angular.identity,
                 headers: {
                     'Content-Type': undefined
                 }
             }).success(function(data) {
-                deferredHandler(data, deferred);
+                deferredHandler({}, deferred);
             }).error(function(data) {
                 deferredHandler(data, deferred, 'Unknown error uploading files');
             })['finally'](function() {

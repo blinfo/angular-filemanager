@@ -3,7 +3,9 @@
     angular.module('FileManagerApp').service('fileNavigator', [
         '$http', '$q', 'fileManagerConfig', 'item', function ($http, $q, fileManagerConfig, Item) {
 
-        $http.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+//        $http.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+        $http.defaults.headers.common['X-BL-orgid'] = '12';
+        $http.defaults.headers.common['X-BL-username'] = 'jel';
 
         var FileNavigator = function() {
             this.requesting = false;
@@ -46,7 +48,7 @@
             self.fileList = [];
             self.error = '';
 
-            $http.post(fileManagerConfig.listUrl, data).success(function(data) {
+            $http.get(fileManagerConfig.baseUrl+path+'/').success(function(data) {
                 self.deferredHandler(data, deferred);
             }).error(function(data) {
                 self.deferredHandler(data, deferred, 'Unknown error listing, check the response');
@@ -60,7 +62,7 @@
             var self = this;
             var path = self.currentPath.join('/');
             return self.list().then(function(data) {
-                self.fileList = (data.result || []).map(function(file) {
+                self.fileList = (data || []).map(function(file) {
                     return new Item(file, self.currentPath);
                 });
                 self.buildTree(path);
@@ -128,7 +130,7 @@
 
         FileNavigator.prototype.listHasFolders = function() {
             for (var item in this.fileList) {
-                if (this.fileList[item].model.type === 'dir') {
+                if (this.fileList[item].model.isFolder) {
                     return true;
                 }
             }
