@@ -7,11 +7,7 @@
             defaultLang: 'en',
 
             baseUrl: 'http://navet-file-dev.jelastic.elastx.net/navet-file-api/resources/files/',
-            uploadUrl: 'bridges/php/handler.php',
-            renameUrl: 'bridges/php/handler.php',
-            copyUrl: 'bridges/php/handler.php',
             editUrl: 'bridges/php/handler.php',
-            getContentUrl: 'bridges/php/handler.php',
             compressUrl: 'bridges/php/handler.php',
             extractUrl: 'bridges/php/handler.php',
             permissionsUrl: 'bridges/php/handler.php',
@@ -20,14 +16,14 @@
             breadcrumb: true,
             allowedActions: {
                 rename: true,
-                copy: true,
-                edit: true,
+                copy: false,
+                edit: false,
                 changePermissions: false,
-                compress: true,
-                compressChooseName: true,
-                extract: true,
+                compress: false,
+                compressChooseName: false,
+                extract: false,
                 download: true,
-                preview: true,
+                preview: false,
                 remove: true
             },
 

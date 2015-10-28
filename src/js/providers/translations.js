@@ -20,7 +20,7 @@
             destination: 'Destination',
             copy_file: 'Copy file',
             sure_to_delete: 'Are you sure to delete',
-            change_name_move: 'Change name / move',
+            change_name_move: 'Change name',
             enter_new_name_for: 'Enter new name for',
             extract_item: 'Extract item',
             extraction_started: 'Extraction started in a background process',
