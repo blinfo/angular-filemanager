@@ -2,12 +2,12 @@
     'use strict';
     angular.module('FileManagerApp').controller('FileManagerCtrl', [
         '$scope', '$translate', '$cookies', 'fileManagerConfig', 'item', 'fileNavigator', 'fileUploader',
-        function ($scope, $translate, $cookies, fileManagerConfig, Item, FileNavigator, FileUploader) {
+        function($scope, $translate, $cookies, fileManagerConfig, Item, FileNavigator, FileUploader) {
 
             $scope.config = fileManagerConfig;
             $scope.reverse = false;
             $scope.predicate = ['model.type', 'model.name'];
-            $scope.order = function (predicate) {
+        $scope.order = function(predicate) {
                 $scope.reverse = ($scope.predicate[1] === predicate) ? !$scope.reverse : false;
                 $scope.predicate[1] = predicate;
             };
@@ -20,7 +20,7 @@
             $scope.viewTemplate = $cookies.viewTemplate || 'main-table.html';
             $scope.customerId = '12';
 
-            $scope.setTemplate = function (name) {
+        $scope.setTemplate = function(name) {
                 $scope.viewTemplate = $cookies.viewTemplate = name;
             };
 
