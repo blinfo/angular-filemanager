@@ -4,7 +4,7 @@
 
         var values = {
             appName: 'NavetFileApp',
-            defaultLang: 'en',
+            defaultLang: 'sv',
 
             baseUrl: 'http://navet-file-dev.jelastic.elastx.net/navet-file-api/resources/files/',
             editUrl: 'bridges/php/handler.php',
