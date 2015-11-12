@@ -4,7 +4,7 @@
         '$http', '$q', 'fileManagerConfig', 'item', function ($http, $q, fileManagerConfig, Item) {
 
 //        $http.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-            $http.defaults.headers.common['X-BL-orgid'] = '12';
+            $http.defaults.headers.common['X-BL-orgid'] = '31';
             $http.defaults.headers.common['X-BL-username'] = 'jel';
 
             var FileNavigator = function () {
@@ -18,7 +18,7 @@
             FileNavigator.prototype.setOrgId = function (orgId) {
                 $http.defaults.headers.common['X-BL-orgid'] = orgId;
                 this.goTo(-1);
-            }
+            };
 
             FileNavigator.prototype.deferredHandler = function (data, deferred, defaultMsg) {
                 if (!data || typeof data !== 'object') {
