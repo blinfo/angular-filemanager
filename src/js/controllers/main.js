@@ -1,8 +1,8 @@
 (function (window, angular, $) {
     'use strict';
     angular.module('FileManagerApp').controller('FileManagerCtrl', [
-        '$scope', '$translate', '$cookies', 'fileManagerConfig', 'item', 'fileNavigator', 'fileUploader',
-        function($scope, $translate, $cookies, fileManagerConfig, Item, FileNavigator, FileUploader) {
+        '$scope', '$translate', '$cookies', 'fileManagerConfig', 'item', 'fileNavigator', 'fileUploader','logger',
+        function($scope, $translate, $cookies, fileManagerConfig, Item, FileNavigator, FileUploader,logger) {
 
             $scope.config = fileManagerConfig;
             $scope.reverse = false;
