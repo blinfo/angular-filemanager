@@ -19,7 +19,7 @@
                     fullPath: function () {
                         return ('/' + this.path.join('/') + '/' + this.name).replace(/\/\//, '/');
                     },
-                    folderPath: function() {
+                    folderPath: function () {
                         return ('/' + this.path.join('/') + '/').replace(/\/\//, '/');
                     }
                 };
@@ -213,12 +213,13 @@
 
             Item.prototype.getUrl = function (preview) {
                 var path = this.model.fullPath();
-                var data = {
-                    mode: 'download',
-                    preview: preview,
-                    path: path
-                };
-                return path && [fileManagerConfig.baseUrl, $.param(data)].join('?');
+//                var data = {
+//                    mode: 'download',
+//                    preview: preview,
+//                    path: path
+//                };
+//                return path && [fileManagerConfig.baseUrl, $.param(data)].join('?');
+                return fileManagerConfig.baseUrl + path;
             };
 
             Item.prototype.download = function (preview) {
@@ -226,7 +227,7 @@
                 if (this.model.type !== 'dir') {
                     this.getContent().then(function () {
                         var fileName = self.model.name;
-                        var content = self.model.contectArrayBuffer;
+                        var content = self.model.contentArrayBuffer;
                         var mediaType = self.model.mediaType + ";charset=utf-8;";
                         var blob = new Blob([content], {type: mediaType});
                         var downloadLink = angular.element('<a></a>');
@@ -245,7 +246,7 @@
                 self.error = '';
                 $http.get(fileManagerConfig.baseUrl + path, {responseType: "arraybuffer"}).success(function (data) {
                     self.tempModel.content = self.model.content = data;
-                    self.model.contectArrayBuffer = data;
+                    self.model.contentArrayBuffer = data;
                     self.deferredHandler({}, deferred);
                 }).error(function (data) {
                     self.deferredHandler(data, deferred, $translate.instant('error_getting_content'));
