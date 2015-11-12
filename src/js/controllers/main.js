@@ -18,7 +18,6 @@
             $scope.fileUploader = FileUploader;
             $scope.uploadFileList = [];
             $scope.viewTemplate = $cookies.viewTemplate || 'main-table.html';
-            $scope.customerId = '12';
 
         $scope.setTemplate = function(name) {
                 $scope.viewTemplate = $cookies.viewTemplate = name;
@@ -41,15 +40,16 @@
                 $scope.customerId = customerId;
                 $scope.fileNavigator.setOrgId(customerId);
                 $scope.modal('changeCustomerId', true);
-            }
+            };
 
             $scope.smartClick = function (item) {
                 if (item.isFolder()) {
                     return $scope.fileNavigator.folderClick(item);
                 }
-                if (item.isImage()) {
-                    return $scope.openImagePreview(item);
-                }
+                //Unsupported until Authentication headers can be put on img get requests.
+//                if (item.isImage()) {
+//                    return $scope.openImagePreview(item);
+//                }
                 if (item.isEditable()) {
                     return $scope.openEditItem(item);
                 }
