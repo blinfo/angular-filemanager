@@ -37,12 +37,6 @@
                 $scope.temp = item;
             };
 
-            $scope.changeCustomerId = function (customerId) {
-                $scope.customerId = customerId;
-                $scope.fileNavigator.setOrgId(customerId);
-                $scope.modal('changeCustomerId', true);
-            };
-
             $scope.smartClick = function (item) {
                 logger.stop();
                 if (item.isFolder()) {

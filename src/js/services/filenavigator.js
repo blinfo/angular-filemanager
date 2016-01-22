@@ -12,11 +12,6 @@
                 this.error = '';
             };
 
-            FileNavigator.prototype.setOrgId = function (orgId) {
-                $http.defaults.headers.common['X-BL-orgid'] = orgId;
-                this.goTo(-1);
-            };
-
             FileNavigator.prototype.deferredHandler = function (data, deferred, defaultMsg) {
                 if (!data || typeof data !== 'object') {
                     this.error = 'Bridge response error, please check the docs';
