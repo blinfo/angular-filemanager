@@ -3,9 +3,6 @@
     angular.module('FileManagerApp').service('fileNavigator', [
         '$http', '$q', 'fileManagerConfig', 'item', function ($http, $q, fileManagerConfig, Item) {
 
-//        $http.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
-            $http.defaults.headers.common['X-BL-orgid'] = '31';
-            $http.defaults.headers.common['X-BL-username'] = 'jel';
 
             var FileNavigator = function () {
                 this.requesting = false;
