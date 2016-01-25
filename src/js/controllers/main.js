@@ -4,7 +4,7 @@
         '$scope', '$translate', '$cookies', 'fileManagerConfig', 'item', 'fileNavigator', 'fileUploader','logger',
         function($scope, $translate, $cookies, fileManagerConfig, Item, FileNavigator, FileUploader,logger) {
 
-            logger.start();
+//            logger.start();
             $scope.config = fileManagerConfig;
             $scope.reverse = false;
             $scope.predicate = ['model.type', 'model.name'];
@@ -38,7 +38,7 @@
             };
 
             $scope.smartClick = function (item) {
-                logger.stop();
+//                logger.stop();
                 if (item.isFolder()) {
                     return $scope.fileNavigator.folderClick(item);
                 }
