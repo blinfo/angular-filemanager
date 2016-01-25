@@ -5,7 +5,7 @@
     logger.$inject = ['toastr'];
     function logger(toastr) {
         
-        var source = new EventSource('http://navet-file-dev.jelastic.elastx.net/navet-file-api/resources/logs/events?orgId=12');
+        var source = new EventSource('http://navet-file-dev.jelastic.elastx.net/navet-file-api/resources/logs/events?orgId=31');
         
         var service = {
             start : start,
