@@ -6,7 +6,7 @@
             appName: 'NavetFileApp',
             defaultLang: 'sv',
 
-            baseUrl: 'http://navet-file-dev.jelastic.elastx.net/navet-file-api/resources/files/',
+            baseUrl: 'http://api-test.jelastic.elastx.net/navet-file-api/resources/files/',
             editUrl: 'bridges/php/handler.php',
             compressUrl: 'bridges/php/handler.php',
             extractUrl: 'bridges/php/handler.php',
